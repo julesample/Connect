@@ -1,0 +1,51 @@
+<?php
+
+use App\Http\Controllers\NotesController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentsController;
+use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
+
+
+Route::get('/', function(){
+return view('auth.login');
+});
+    
+
+
+Route::middleware(['auth','verified'])->group(function () {
+//     Route::get('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'show'])
+//     ->name('two-factor.show');
+// Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
+// Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
+    Route::get('/dashboard', [NotesController::class, 'index' ])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/view', [ProfileController::class,'view'])->name('profile.view');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/dashboard/add_note', [NotesController::class, 'store'])->name('main.add_note');
+    Route::post('/comments', [CommentsController::class, 'store'])->name('comments.store');  
+    Route::delete('/comments/deleting', [CommentsController::class, 'destroy'])->name('comments.destroy');
+    Route::delete('/dashboard/delete_note/{id}',[NotesController::class,'destroy'])->name('note.delete');
+    Route::patch('/dashboard/update_note/{id}',[NotesController::class,'update'])->name('note.update');
+});
+
+// Route::middleware(['auth'])->group( function(){
+//     Route::get('/user/two-factor-authentication/enable', function () {
+//         return view('auth.enable-2fa');
+//     })->name('two-factor.enable');  
+    
+//     Route::get('/user/two-factor-authentication/disable', function () {
+//         return view('auth.disable-2fa');
+//     })->name('two-factor.disable');
+    
+//     Route::get('/user/two-factor-authentication/manage-recovery-codes', function () {
+//         return view('auth.manage-recovery-codes');
+//     })->name('two-factor.recovery-codes');
+
+
+// });
+
+
+
+require __DIR__.'/auth.php';
