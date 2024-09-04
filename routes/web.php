@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentsController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FriendRequestController;
 use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 
 
@@ -18,7 +19,8 @@ Route::middleware(['auth','verified'])->group(function () {
 //     ->name('two-factor.show');
 // Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
 // Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
-    Route::get('/dashboard', [NotesController::class, 'index' ])->name('dashboard');
+    Route::get('/dashboard', [NotesController::class, 'showDashboard' ])->name('dashboard');
+    Route::get('/dashboard/data', [NotesController::class, 'index'])->name('dashboard.data');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile/view', [ProfileController::class,'view'])->name('profile.view');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -28,6 +30,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::delete('/comments/deleting', [CommentsController::class, 'destroy'])->name('comments.destroy');
     Route::delete('/dashboard/delete_note/{id}',[NotesController::class,'destroy'])->name('note.delete');
     Route::patch('/dashboard/update_note/{id}',[NotesController::class,'update'])->name('note.update');
+    Route::post('/friend-request', [FriendRequestController::class, 'sendRequest'])->name('friend-request.send');
+    Route::post('/friend-request/cancel', [FriendRequestController::class, 'cancelRequest'])->name('friend-request.cancel');
 });
 
 // Route::middleware(['auth'])->group( function(){

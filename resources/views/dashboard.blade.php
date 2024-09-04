@@ -54,9 +54,54 @@
               <div class="flex flex-col items-center">
                 <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
                 <div class="text-lg font-semibold mb-2">{{$user->name}}</div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-                    Add Friend
-                </button>
+             <div x-data="friendRequestHandler({{ $user->id }}, {{ $isFriend ? 'true' : 'false' }})">
+    <button 
+        @click="toggleFriendRequest" 
+        :class="isFriend ? 'bg-gray-500 hover:bg-gray-700' : 'bg-blue-500 hover:bg-blue-700'"
+        class="text-white py-2 px-4 rounded"
+    >
+        <span x-text="isFriend ? 'Cancel' : 'Add Friend'"></span>
+    </button>
+</div>
+<script>
+  function friendRequestHandler(recipientId, isFriendInitial) {
+    return {
+        isFriend: isFriendInitial === 'true', // Convert string to boolean
+
+        toggleFriendRequest() {
+            if (this.isFriend) {
+                axios.post('{{ route('friend-request.cancel') }}', {
+                    receiver_id: recipientId,
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(response => {
+                    this.isFriend = false;
+                    console.log(response.data.status);
+                }).catch(error => {
+                    console.error('Error canceling friend request:', error.response.data);
+                });
+            } else {
+                axios.post('{{ route('friend-request.send') }}', {
+                    receiver_id: recipientId,
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(response => {
+                    this.isFriend = true;
+                    console.log(response.data.status);
+                }).catch(error => {
+                    console.error('Error sending friend request:', error.response.data);
+                });
+            }
+        }
+    };
+  }
+  </script>
+  
+              
               </div>
               <div class="ml-4 flex-1">
                 <p class="text-sm text-gray-400">{{$user->bio}}</p>

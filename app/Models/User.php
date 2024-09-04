@@ -12,7 +12,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     public function notes(){
-        return $this->hasMany(Notes::class);
+        return $this->hasMany(Notes::class)->latest();
     }
     
     /**

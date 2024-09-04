@@ -25,12 +25,12 @@ class Notes extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'note_id'); 
+        return $this->hasMany(Comment::class, 'note_id')->latest(); 
     }
 
 public function notes()
 {
-    return $this->hasMany(Notes::class)->latest('created_at');
+    return $this->hasMany(Notes::class);
 }
 
 }
