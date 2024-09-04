@@ -14,8 +14,10 @@ class Notes extends Model
         'description',
         'likes',
         'user_id'
-        
     ];
+
+
+  
 
     public function user(){
         return $this->belongsTo(User::class);
@@ -26,8 +28,9 @@ class Notes extends Model
         return $this->hasMany(Comment::class, 'note_id'); 
     }
 
-    public function notes()
-    {
-        return $this->hasMany(Notes::class);
-    }
+public function notes()
+{
+    return $this->hasMany(Notes::class)->latest('created_at');
+}
+
 }

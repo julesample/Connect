@@ -100,20 +100,22 @@
           <div class="flex flex-col bg-gray-800 text-white shadow-md rounded-lg">
             <div class="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div class="flex items-center">
-                  <img src="{{ asset('storage/' . $note->user->avatar) }}" alt="Avatar" class="w-12 h-12 rounded-full mr-4">
+                  <img src="{{ asset('storage/' . $note->user->avatar) }}" alt="Avatar" class="w-12 h-12 rounded-full mr-2">
                   <div>
                       <h3 class="text-lg font-medium">{{ $note->user->name }}</h3>
                       <p class="text-gray-400 text-sm">{{ "@" . $note->user->email }}</p>
                   </div>
               </div>
-              <div class="flex space-x-2">
+              <div  class="flex flex-col sm:flex-row justify-evenly px-2 sm:px-4 space-y-2 sm:space-y-0 sm:space-x-4">
          <!-- Edit Modal -->
                 <div x-data="{ openEditModal: false }">
                    <!-- Edit Button -->
-                <button @click="openEditModal = true" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                  Edit
-              </button>
-      
+                   <button 
+                   @click="openEditModal = true" 
+                   class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 sm:px-4 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300 text-sm sm:text-base">
+                   Edit
+               </button>
+               
                   <div x-show="openEditModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                       <div @click.away="openEditModal = false" class="bg-gray-800 text-white shadow-md rounded-lg p-6 w-full max-w-sm">
                           <h2 class="text-xl font-semibold text-gray-200">Edit Note</h2>
@@ -140,7 +142,7 @@
 
          <div x-data="{ openDeleteModal: false }">
              <!-- Delete Button -->
-             <button @click="openDeleteModal = true" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300">
+             <button @click="openDeleteModal = true" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 sm:px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 text-sm sm:text-base">
               Delete
           </button>
           <div x-show="openDeleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
@@ -182,7 +184,7 @@
 
               <div x-data="{ open: false }">
                 <!-- Trigger Button -->
-                <button @click="open = true" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="open = true" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 sm:px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm sm:text-base">
                     Add Comment
                 </button>
             
@@ -273,8 +275,6 @@
                         </div>
                     </div>
                 </div>
-                
-          
           </div>
           
           

@@ -9,20 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class NotesController extends Controller
 {
     //
-    public function index(){
-        $userId=Auth::id();
-
-        $notes = Notes::where('user_id', $userId)
-        ->with('user', 'comments')
-        ->get();
-
+    public function index(){ 
+    
+        $notes = Auth::user()->notes;
         $users = User::with('notes')
-        ->where('id', '!=', $userId)
+        ->where('id', '!=', Auth::id())
         ->get();
-        
-
         return view('dashboard', ['notes' => $notes,
         'users' => $users,
+
       ]);
     }
 
