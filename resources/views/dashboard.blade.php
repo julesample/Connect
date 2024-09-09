@@ -54,12 +54,12 @@
               <div class="flex flex-col items-center">
                 <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="w-20 h-20 rounded-full mb-2">
                 <div class="text-lg font-semibold mb-2">{{$user->name}}</div>
-             <div x-data="friendRequestHandler({{ $user->id }}, {{ $isFriend ? 'true' : 'false' }})">
-    <button 
-        @click="toggleFriendRequest" 
-        :class="isFriend ? 'bg-gray-500 hover:bg-gray-700' : 'bg-blue-500 hover:bg-blue-700'"
-        class="text-white py-2 px-4 rounded"
-    >
+                <div x-data="friendRequestHandler({{ $user->id }}, {{ $friendStatuses[$user->id] ? 'true' : 'false' }})">
+                    <button 
+                    @click="toggleFriendRequest" 
+                    :class="isFriend ? 'bg-gray-500 hover:bg-gray-700' : 'bg-blue-500 hover:bg-blue-700'"
+                    class="text-white py-2 px-4 rounded"
+                >
         <span x-text="isFriend ? 'Cancel' : 'Add Friend'"></span>
     </button>
 </div>
@@ -148,7 +148,7 @@
                       <p class="text-gray-400 text-sm">{{ "@" . $note->user->email }}</p>
                   </div>
               </div>
-              <div  class="flex flex-col sm:flex-row justify-evenly px-2 sm:px-4 space-y-2 sm:space-y-0 sm:space-x-4">
+              <div  class="flex flex-col sm:flex-row justify-evenly sm:space-x-4">
          <!-- Edit Modal -->
                 <div x-data="{ openEditModal: false }">
                    <!-- Edit Button -->

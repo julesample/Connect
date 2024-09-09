@@ -51,7 +51,7 @@
                             <div class="text-gray-400 text-sm">
                                 {{$note->created_at->diffForHumans()}}
                             </div>
-                            <div class="flex flex-col sm:flex-row justify-evenly px-2 sm:px-4 space-y-2 sm:space-y-0 sm:space-x-4">
+                            <div class="flex flex-col sm:flex-row justify-evenly sm:space-x-4">
                                 <!-- Update Button -->
                                      <!-- Edit Modal -->
                 <div x-data="{ openEditModal: false }">

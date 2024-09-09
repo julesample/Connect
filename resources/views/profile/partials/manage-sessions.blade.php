@@ -15,9 +15,9 @@
                 <form method="POST" action="{{ route('sessions.delete', $session->id) }}">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Delete
-                    </button>
+                    <x-danger-button class="ms-3">
+                        {{ __('Delete Session') }}
+                    </x-danger-button>
                 </form>
             @endif
         </div>

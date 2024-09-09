@@ -33,6 +33,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/dashboard/update_note/{id}',[NotesController::class,'update'])->name('note.update');
     Route::post('/friend-request', [FriendRequestController::class, 'sendRequest'])->name('friend-request.send');
     Route::post('/friend-request/cancel', [FriendRequestController::class, 'cancelRequest'])->name('friend-request.cancel');
+    Route::get('/friend-request/status/{userId}', [FriendRequestController::class, 'checkStatus']);
+
 });
 
 

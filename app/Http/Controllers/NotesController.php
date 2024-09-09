@@ -10,70 +10,44 @@ use Illuminate\Support\Facades\Auth;
 class NotesController extends Controller
 {
     //
-    public function index(){ 
-    
+   
+
+  public function showDashboard()
+  {
       $userId = Auth::id();
-      $profileUserId = $userId; // Replace with the actual user ID you want to check
   
+      // Fetch notes for the current user
       $notes = Notes::where('user_id', $userId)
           ->with('user', 'comments')
           ->orderBy('created_at', 'desc')
           ->get();
   
+      // Fetch all other users
       $users = User::with('notes')
           ->where('id', '!=', $userId)
           ->get();
   
-      // Check if the current user has sent a friend request to or received a friend request from the profile user
-      $isFriend = FriendRequest::where(function ($query) use ($userId, $profileUserId) {
-          $query->where('sender_id', $userId)
-                ->where('receiver_id', $profileUserId);
-      })->orWhere(function ($query) use ($userId, $profileUserId) {
-          $query->where('sender_id', $profileUserId)
-                ->where('receiver_id', $userId);
-      })->exists();
+      // Prepare friend request statuses for each user
+      $friendStatuses = [];
+      foreach ($users as $user) {
+          $isFriend = FriendRequest::where(function ($query) use ($userId, $user) {
+              $query->where('sender_id', $userId)
+                    ->where('receiver_id', $user->id);
+          })->orWhere(function ($query) use ($userId, $user) {
+              $query->where('sender_id', $user->id)
+                    ->where('receiver_id', $userId);
+          })->exists();
   
-      return response()->json([
+          $friendStatuses[$user->id] = $isFriend;
+      }
+  
+      return view('dashboard', [
           'notes' => $notes,
           'users' => $users,
-          'isFriend' => $isFriend,
-          'profileUserId' => $profileUserId
+          'friendStatuses' => $friendStatuses, // Pass friend statuses array
       ]);
-
   }
-
-
-public function showDashboard()
-{
-    $userId = Auth::id();
-    $profileUserId = $userId;
-
-    // Initial data rendering (if needed)
-    $notes = Notes::where('user_id', $userId)
-        ->with('user', 'comments')
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-    $users = User::with('notes')
-        ->where('id', '!=', $userId)
-        ->get();
-
-    $isFriend = FriendRequest::where(function ($query) use ($userId, $profileUserId) {
-        $query->where('sender_id', $userId)
-              ->where('receiver_id', $profileUserId);
-    })->orWhere(function ($query) use ($userId, $profileUserId) {
-        $query->where('sender_id', $profileUserId)
-              ->where('receiver_id', $userId);
-    })->exists();
-
-    return view('dashboard', [
-        'notes' => $notes,
-        'users' => $users,
-        'isFriend' => $isFriend,
-        'profileUserId' => $profileUserId
-    ]);
-}
-
+  
 
     public function store(Request $request){
       
