@@ -65,39 +65,39 @@
 </div>
 <script>
   function friendRequestHandler(recipientId, isFriendInitial) {
-    return {
-        isFriend: isFriendInitial === 'true', // Convert string to boolean
-
-        toggleFriendRequest() {
-            if (this.isFriend) {
-                axios.post('{{ route('friend-request.cancel') }}', {
-                    receiver_id: recipientId,
-                }, {
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(response => {
-                    this.isFriend = false;
-                    console.log(response.data.status);
-                }).catch(error => {
-                    console.error('Error canceling friend request:', error.response.data);
-                });
-            } else {
-                axios.post('{{ route('friend-request.send') }}', {
-                    receiver_id: recipientId,
-                }, {
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(response => {
-                    this.isFriend = true;
-                    console.log(response.data.status);
-                }).catch(error => {
-                    console.error('Error sending friend request:', error.response.data);
-                });
-            }
-        }
-    };
+      return {
+          isFriend: isFriendInitial, // Initialize based on the server's current state
+  
+          toggleFriendRequest() {
+              if (this.isFriend) {
+                  axios.post('{{ route('friend-request.cancel') }}', {
+                      receiver_id: recipientId,
+                  }, {
+                      headers: {
+                          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                      }
+                  }).then(response => {
+                      this.isFriend = false;
+                      console.log(response.data.status);
+                  }).catch(error => {
+                      console.error('Error canceling friend request:', error.response.data);
+                  });
+              } else {
+                  axios.post('{{ route('friend-request.send') }}', {
+                      receiver_id: recipientId,
+                  }, {
+                      headers: {
+                          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                      }
+                  }).then(response => {
+                      this.isFriend = true;
+                      console.log(response.data.status);
+                  }).catch(error => {
+                      console.error('Error sending friend request:', error.response.data);
+                  });
+              }
+          }
+      };
   }
   </script>
   
@@ -139,9 +139,6 @@
 
       @foreach($notes as $note)
         <div class="max-w-4xl mx-auto p-4">
-        
-     
-        
           <div class="flex flex-col bg-gray-800 text-white shadow-md rounded-lg">
             <div class="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div class="flex items-center">

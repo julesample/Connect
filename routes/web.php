@@ -25,6 +25,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/profile/view', [ProfileController::class,'view'])->name('profile.view');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    route::delete('/sessions/{id}', [ProfileController::class, 'delete_sessions'])->name('sessions.delete');
     Route::post('/dashboard/add_note', [NotesController::class, 'store'])->name('main.add_note');
     Route::post('/comments', [CommentsController::class, 'store'])->name('comments.store');  
     Route::delete('/comments/deleting', [CommentsController::class, 'destroy'])->name('comments.destroy');
@@ -34,21 +35,6 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/friend-request/cancel', [FriendRequestController::class, 'cancelRequest'])->name('friend-request.cancel');
 });
 
-// Route::middleware(['auth'])->group( function(){
-//     Route::get('/user/two-factor-authentication/enable', function () {
-//         return view('auth.enable-2fa');
-//     })->name('two-factor.enable');  
-    
-//     Route::get('/user/two-factor-authentication/disable', function () {
-//         return view('auth.disable-2fa');
-//     })->name('two-factor.disable');
-    
-//     Route::get('/user/two-factor-authentication/manage-recovery-codes', function () {
-//         return view('auth.manage-recovery-codes');
-//     })->name('two-factor.recovery-codes');
-
-
-// });
 
 
 

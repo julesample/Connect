@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use App\Models\Notes;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+
 class ProfileController extends Controller
 {
     /**
@@ -29,8 +31,14 @@ class ProfileController extends Controller
     }
     public function edit(Request $request): View
     {
+        // Retrieve the user's sessions
+        $sessions = DB::table('sessions')
+            ->where('user_id', $request->user()->id)
+            ->get();
+    
         return view('profile.edit', [
             'user' => $request->user(),
+            'sessions' => $sessions, // Pass the sessions to the view
         ]);
     }
 
@@ -83,5 +91,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function delete_sessions(Request $request, $id){
+        DB::table('sessions')->where('id',$id)->delete();
+        return redirect()->back();
+
     }
 }
