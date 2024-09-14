@@ -3,7 +3,7 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 import Swiper from 'swiper';
-import { EffectCards } from 'swiper/modules';
+import { Autoplay, EffectCards } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 

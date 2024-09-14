@@ -1,15 +1,15 @@
 <?php
 
+use App\Http\Controllers\ViewsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FriendRequestController;
-use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 
 
 Route::get('/', function(){
-return view('auth.login');
+return view(view: 'auth.login');
 });
     
 
@@ -19,10 +19,10 @@ Route::middleware(['auth','verified'])->group(function () {
 //     ->name('two-factor.show');
 // Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store']);
 // Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy']);
-    Route::get('/dashboard', [NotesController::class, 'showDashboard' ])->name('dashboard');
-    Route::get('/dashboard/data', [NotesController::class, 'index'])->name('dashboard.data');
+    Route::get('/dashboard', [ViewsController::class, 'index' ])->name('dashboard');
+    Route::get('/friend-request', [ViewsController::class, 'FriendRequestView'])->name('request.view');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::get('/profile/view', [ProfileController::class,'view'])->name('profile.view');
+    Route::get('/profile/view', [ViewsController::class,'ProfileView'])->name('profile.view');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     route::delete('/sessions/{id}', [ProfileController::class, 'delete_sessions'])->name('sessions.delete');
@@ -31,9 +31,14 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::delete('/comments/deleting', [CommentsController::class, 'destroy'])->name('comments.destroy');
     Route::delete('/dashboard/delete_note/{id}',[NotesController::class,'destroy'])->name('note.delete');
     Route::patch('/dashboard/update_note/{id}',[NotesController::class,'update'])->name('note.update');
-    Route::post('/friend-request', [FriendRequestController::class, 'sendRequest'])->name('friend-request.send');
-    Route::post('/friend-request/cancel', [FriendRequestController::class, 'cancelRequest'])->name('friend-request.cancel');
-    Route::get('/friend-request/status/{userId}', [FriendRequestController::class, 'checkStatus']);
+    Route::post('/friend-request/send', [FriendRequestController::class, 'sendRequest'])->name('friend-request.send');
+    Route::post('/friend-request/cancel', [FriendRequestController::class, 'cancel'])->name('friend-request.cancel');
+
+    Route::post('/friend-request/cancel/{id}', [FriendRequestController::class, 'friendRequestCancel'])->name('friend-request.cancel.page');
+    Route::post('/friend-request/accept/{id}', [FriendRequestController::class, 'accept'])->name('friend-request.accept');
+    Route::post('/friend-request/decline/{id}', [FriendRequestController::class, 'decline'])->name('friend-request.decline');
+
+
 
 });
 

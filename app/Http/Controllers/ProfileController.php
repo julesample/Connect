@@ -18,17 +18,7 @@ class ProfileController extends Controller
      */
 
 
-    public function view(){
 
-        $notes = Notes::with('user','comments')->get();
-        $notes = Auth::user()->notes;
-        $notesCount=$notes->count();
-        return view('profile.view', [
-        'notes' => $notes,
-        'notesCount'=>$notesCount
-    ]);
-        
-    }
     public function edit(Request $request): View
     {
         // Retrieve the user's sessions

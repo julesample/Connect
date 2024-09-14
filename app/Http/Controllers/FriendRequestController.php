@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Friendships;
 use Illuminate\Http\Request;
 use App\Models\FriendRequest;
 use Illuminate\Support\Facades\Auth;
@@ -10,31 +11,48 @@ class FriendRequestController extends Controller
 {
     //
 
-    public function checkStatus(Request $request, $userId)
+    public function accept($id)
     {
-        $currentUser = Auth::id();
+        $friendRequest = FriendRequest::findOrFail($id);
+        if ($friendRequest->receiver_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        // Accept logic, e.g., creating friendship records
+        $friendRequest->status = 'friends';
+        $friendRequest->save();
+        return response()->json(['message' => 'Friend request accepted']);
+    }
 
-        // Check if there is an existing friend request
-        $friendRequest = FriendRequest::where(function ($query) use ($currentUser, $userId) {
-                $query->where('sender_id', $currentUser)
-                      ->where('receiver_id', $userId);
-            })
-            ->orWhere(function ($query) use ($currentUser, $userId) {
-                $query->where('sender_id', $userId)
-                      ->where('receiver_id', $currentUser);
-            })
-            ->first();
+    public function decline($id)
+    {
+        $friendRequest = FriendRequest::findOrFail($id);
+        if ($friendRequest->receiver_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        // Decline logic
+        $friendRequest->delete();
+        
+        return response()->json(['message' => 'Friend request declined']);
+    }
 
-        if ($friendRequest) {
-            if ($friendRequest->status == 'pending') {
-                return response()->json(['status' => 'pending']);
-            } elseif ($friendRequest->status == 'accepted') {
-                return response()->json(['status' => 'accepted']);
-            }
+
+
+    public function friendRequestCancel(Request $request)
+    {
+        $friendRequest = FriendRequest::findOrFail($request->request_id);
+        
+        if ($friendRequest->sender_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json(['status' => 'none']);
+        $friendRequest->delete();
+
+        return response()->json(['message' => 'Friend request cancelled']);
     }
+  
+
+  
+
     public function sendRequest(Request $request)
     {
         $currentUser = Auth::id();
@@ -58,7 +76,7 @@ class FriendRequestController extends Controller
         return response()->json(['status' => 'already_requested']);
     }
 
-    public function cancelRequest(Request $request)
+    public function cancel(Request $request)
     {
         $currentUser = Auth::id();
         $receiverId = $request->input('receiver_id');
@@ -71,4 +89,11 @@ class FriendRequestController extends Controller
         return response()->json(['status' => 'canceled']);
     }
 
+
+ 
+ 
+
+
 }
+
+
